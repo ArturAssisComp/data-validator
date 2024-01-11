@@ -39,7 +39,3 @@ jobs:
         with:
           min_coverage: 100
           
-      - name: Uploading coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
