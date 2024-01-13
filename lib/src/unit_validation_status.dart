@@ -6,21 +6,31 @@
 enum UnitValidationStatusCode {
   /// Indicates the validation was successful and the data meets all criteria
   /// for this unit.
-  success,
+  success(defaultDescription: 'Target validation data is valid.'),
 
   /// Indicates the validation failed due to the data not meeting certain
   /// criteria specific to this unit.
-  failed,
+  failed(defaultDescription: 'Target validation data is not valid.'),
 
   /// Indicates the validation resulted in a warning for this unit, suggesting
   /// potential issues that may not necessarily fail the validation but should
   /// be noted.
-  warning,
+  warning(
+    defaultDescription:
+        'Target validation data is valid, but there are potential issues.',
+  ),
 
   /// Indicates that the validation status for this unit has not yet been
   /// determined or is pending. This status is used when the validation process
   /// for this unit has not been completed or not executed yet.
-  notDefined;
+  notDefined(
+    defaultDescription: 'Target validation data is not validated yet.',
+  );
+
+  /// This description is used as default if no more detailed description is
+  /// provided.
+  final String defaultDescription;
+  const UnitValidationStatusCode({required this.defaultDescription});
 }
 
 /// {@template UnitValidationStatus}
@@ -80,14 +90,20 @@ final class UnitValidationStatus {
       );
 
   @override
+  String toString() => '$nodeName: ${status.name}';
+
+  @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
-    return other is UnitValidationStatus &&
-        nodeName == other.nodeName &&
-        status == other.status &&
-        description == other.description;
+    if (other is UnitValidationStatus) {
+      return nodeName == other.nodeName &&
+          status == other.status &&
+          description == other.description &&
+          runtimeType == other.runtimeType;
+    }
+    return false;
   }
 
   @override
