@@ -24,16 +24,16 @@ void main() {
       final l2 = <int>[];
       expect(listEquality(l1, l2), isFalse);
     });
-    test('[1, 2, 3] equals [1, 2, 3]', (){
+    test('[1, 2, 3] equals [1, 2, 3]', () {
       expect(listEquality(<int>[1, 2, 3], <int>[1, 2, 3]), isTrue);
     });
-    test('[1, 2] not equals [1, 2, 3]', (){
+    test('[1, 2] not equals [1, 2, 3]', () {
       expect(listEquality(<int>[1, 2], <int>[1, 2, 3]), isFalse);
     });
-    test('<int>[1, 2] not equals <num>[1, 2, 3]', (){
+    test('<int>[1, 2] not equals <num>[1, 2, 3]', () {
       expect(listEquality(<int>[1, 2], <num>[1, 2, 3]), isFalse);
     });
-    test('<int>[1, 2, 3] not equals <num>[1, 20, 3]', (){
+    test('<int>[1, 2, 3] not equals <num>[1, 20, 3]', () {
       expect(listEquality<int>(<int>[1, 2, 3], <int>[1, 20, 3]), isFalse);
     });
     test('Different Types', () {

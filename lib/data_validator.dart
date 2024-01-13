@@ -4,7 +4,6 @@
 library;
 
 export 'src/base_validator.dart';
-export 'src/data_validator_base.dart';
 export 'src/unit_validation_status.dart';
 export 'src/validation_status.dart';
 
