@@ -10,14 +10,14 @@ void main() {
           nodeName: 'n1',
           status: UnitValidationStatusCode.success,
         );
-        expect(s1.toString(), 'n1: success');
+        expect(s1.toString(), '<n1: success [finished]>');
       });
       test("name: '' with failure", () {
         const s1 = UnitValidationStatus(
           nodeName: '',
           status: UnitValidationStatusCode.failed,
         );
-        expect(s1.toString(), ': failed');
+        expect(s1.toString(), '<: failed [finished]>');
       });
     });
     group('hashCode', () {
@@ -90,6 +90,20 @@ void main() {
         expect(v1, isNot(equals(different)));
       });
 
+      test('not equal - different finished', () {
+        const v1 = UnitValidationStatus(
+          nodeName: nodeName,
+          status: UnitValidationStatusCode.success,
+        );
+        const different = UnitValidationStatus(
+          nodeName: nodeName,
+          status: UnitValidationStatusCode.failed,
+          finished: false,
+        );
+        expect(v1, isNot(equals(different)));
+      });
+
+
       test('not equal - both different', () {
         const v1 = UnitValidationStatus(
           nodeName: nodeName,
@@ -112,7 +126,7 @@ void main() {
       });
     });
 
-    group('copyOf', () {
+    group('copyWith', () {
       test('identical copy', () {
         const v1 = UnitValidationStatus(
           nodeName: nodeName,
