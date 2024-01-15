@@ -7,6 +7,13 @@ final class SimpleValidator extends BaseValidator<String> {
 
 void main() {
   group('SimpleValidator (that extends from BaseValidator)', () {
+    final validationStatus = ValidationStatus(
+      validationName: 'Validate test string',
+    );
+    final simpleValidator = SimpleValidator(
+      target: 'test',
+      validationStatus: validationStatus,
+    );
     test('instantiate', () {
       final validationStatus = ValidationStatus(
         validationName: 'some validation',
@@ -15,6 +22,9 @@ void main() {
         target: 'some string to be validated',
         validationStatus: validationStatus,
       );
+    });
+    group('validate', () {
+      test('call', simpleValidator.validate);
     });
   });
 }
