@@ -103,7 +103,6 @@ void main() {
         expect(v1, isNot(equals(different)));
       });
 
-
       test('not equal - both different', () {
         const v1 = UnitValidationStatus(
           nodeName: nodeName,

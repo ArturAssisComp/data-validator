@@ -14,7 +14,7 @@ enum UnitValidationStatusCode {
   /// Indicates the validation failed due to the data not meeting certain
   /// criteria specific to this unit. If the validation process is not finished
   /// yet, this is a partial result indicating failure. But, this result may not
-  /// change until the end of the pipeline. 
+  /// change until the end of the pipeline.
   failed(defaultDescription: 'Target validation data is not valid.'),
 
   /// Indicates the validation resulted in a warning for this unit, suggesting
@@ -59,11 +59,11 @@ final class UnitValidationStatus {
   /// insight into the outcome for this specific validation step.
   final UnitValidationStatusCode status;
 
-  /// If true, it means that the status represents a finished validation 
+  /// If true, it means that the status represents a finished validation
   /// process. Otherwise, it represents a validation process that is still not
   /// finished and thus may change over time and may not be used to determine
   /// the status of another validation process in which this is part as a nested
-  /// validation process (the only exception is for the 
+  /// validation process (the only exception is for the
   /// [UnitValidationStatusCode.failed] status).
   final bool finished;
 
@@ -79,8 +79,8 @@ final class UnitValidationStatus {
   /// ## Parameters:
   /// - `nodeName`: The name of the node in the validation pipeline.
   /// - `status`: The validation status code for this node.
-  /// - `finished`: (Optional) Boolean determining if the validation process 
-  /// either finished or not. 
+  /// - `finished`: (Optional) Boolean determining if the validation process
+  /// either finished or not.
   /// - `description`: (Optional) A descriptive message about the validation
   /// status for this node.
   ///
@@ -109,8 +109,8 @@ final class UnitValidationStatus {
       );
 
   @override
-  String toString() => '<$nodeName: ${status.name} ' 
-  '[${finished?'finished':'not finished'}]>';
+  String toString() => '<$nodeName: ${status.name} '
+      '[${finished ? 'finished' : 'not finished'}]>';
 
   @override
   bool operator ==(Object other) {
