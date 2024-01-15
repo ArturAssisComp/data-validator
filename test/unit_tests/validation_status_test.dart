@@ -7,6 +7,26 @@ void main() {
       // add tests here to complete the implementation of addResult. eAch result
       // added should update the current general state.
     });
+    group('hashCode', () {
+      test('diffetent hash codes for different validation name', () {
+        final s1 = ValidationStatus(
+          validationName: 'v1',
+        );
+        final s2 = ValidationStatus(
+          validationName: 'v2',
+        );
+        expect(s1.hashCode, isNot(equals(s2.hashCode)));
+      });
+      test('same hash codes for equal node and status', () {
+        final s1 = ValidationStatus(
+          validationName: 'v1',
+        );
+        final s2 = ValidationStatus(
+          validationName: 'v1',
+        );
+        expect(s1.hashCode, equals(s2.hashCode));
+      });
+    });
     group('Operator ==', () {
       test('identical', () {
         final v = ValidationStatus(validationName: 'test');
