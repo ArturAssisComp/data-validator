@@ -78,7 +78,7 @@ final class UnitValidationStatus {
   /// Creates a copy of the current instance, replacing only the provided
   /// parameters. Useful for creating modified versions of the status without
   /// altering the other attributes.
-  UnitValidationStatus copyOf({
+  UnitValidationStatus copyWith({
     String? nodeName,
     UnitValidationStatusCode? status,
     String? description,

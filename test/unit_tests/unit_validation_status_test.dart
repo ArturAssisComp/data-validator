@@ -20,6 +20,30 @@ void main() {
         expect(s1.toString(), ': failed');
       });
     });
+    group('hashCode', () {
+      test('diffetent hash codes for different node name', () {
+        const s1 = UnitValidationStatus(
+          nodeName: 'n1',
+          status: UnitValidationStatusCode.success,
+        );
+        const s2 = UnitValidationStatus(
+          nodeName: 'N1',
+          status: UnitValidationStatusCode.success,
+        );
+        expect(s1.hashCode, isNot(equals(s2.hashCode)));
+      });
+      test('same hash codes for equal node and status', () {
+        const s1 = UnitValidationStatus(
+          nodeName: 'n1',
+          status: UnitValidationStatusCode.success,
+        );
+        const s2 = UnitValidationStatus(
+          nodeName: 'n1',
+          status: UnitValidationStatusCode.success,
+        );
+        expect(s1.hashCode, equals(s2.hashCode));
+      });
+    });
     group('== operator', () {
       const nodeName = 'TestNode';
       test('identical', () {
@@ -94,7 +118,7 @@ void main() {
           nodeName: nodeName,
           status: UnitValidationStatusCode.notDefined,
         );
-        expect(v1.copyOf(), v1);
+        expect(v1.copyWith(), v1);
       });
       test('different copy', () {
         const v1 = UnitValidationStatus(
@@ -105,7 +129,7 @@ void main() {
           nodeName: nodeName,
           status: UnitValidationStatusCode.success,
         );
-        expect(v1.copyOf(status: UnitValidationStatusCode.success), expected);
+        expect(v1.copyWith(status: UnitValidationStatusCode.success), expected);
       });
     });
   });
