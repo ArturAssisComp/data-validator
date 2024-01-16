@@ -7,9 +7,10 @@ void main() {
     group('toString', () {
       test('name: n1 with success and description', () {
         const s1 = UnitValidationStatus(
-            nodeName: 'n1',
-            status: UnitValidationStatusCode.success,
-            description: 'hello world.');
+          nodeName: 'n1',
+          status: UnitValidationStatusCode.success,
+          description: 'hello world.',
+        );
         expect(s1.toString(), '(n1: success [finished], "hello world.")');
       });
       test('name: n1 with success', () {

@@ -25,11 +25,11 @@ enum ValidationFailureCode {
   /// have a well-defined final state like 'failed', 'success', 'warning', or a
   /// definitive state for unfinished validations (only 'failed').
   addingNotDefinedStateToValidationPipeline(
-      message:
-          'Failed to add a new result: the validation status is undefined. '
-          'A well-defined final state is required. If the state to be added is '
-          'not finished, only "failed" is accepted. If it is finished, '
-          '"failed", "success", or "warning" are accepted.'),
+    message: 'Failed to add a new result: the validation status is undefined. '
+        'A well-defined final state is required. If the state to be added is '
+        'not finished, only "failed" is accepted. If it is finished, '
+        '"failed", "success", or "warning" are accepted.',
+  ),
 
   /// Enumeration for code 'unknown'
   unknown(
