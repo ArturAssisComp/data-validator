@@ -21,7 +21,7 @@ final class SimpleValidator extends BaseValidator<String> {
             status: UnitValidationStatusCode.failed,
             finished: true,
             description: 'The word "$target" has length ${target.length} which '
-                'is greater than $N',
+                'is greater than $N.',
           );
         }
         if (target.length < N) {
@@ -29,14 +29,14 @@ final class SimpleValidator extends BaseValidator<String> {
             status: UnitValidationStatusCode.failed,
             finished: true,
             description: 'The word "$target" has length ${target.length} which '
-                'is less than $N',
+                'is less than $N.',
           );
         }
         return result.copyWith(
           status: UnitValidationStatusCode.success,
           finished: true,
           description: 'The word "$target" has length ${target.length} which '
-              'is equal to $N',
+              'is equal to $N.',
         );
       },
     );
@@ -51,17 +51,17 @@ final class SimpleValidator extends BaseValidator<String> {
     );
     registerValidationMethod(
       () {
-        if (target[0].toLowerCase() != target[0]) {
+        if (target[0].toUpperCase() != target[0]) {
           return result.copyWith(
             status: UnitValidationStatusCode.failed,
             finished: true,
-            description: 'The word "$target" does not start with upper case',
+            description: 'The word "$target" does not start with upper case.',
           );
         }
         return result.copyWith(
           status: UnitValidationStatusCode.success,
           finished: true,
-          description: 'The word "$target" starts with upper case',
+          description: 'The word "$target" starts with upper case.',
         );
       },
     );
@@ -94,22 +94,80 @@ void main() {
             nodeName: validationName,
             finished: false,
             status: UnitValidationStatusCode.failed,
-            description: 'The word "test" has length 4 which is greater than 3',
+            description: 'The word "test" has length 4 which is greater than '
+                '3.',
           ),
         ),
       );
     });
-    group('validate', () {});
+    group('validate', () {
+      test('throw failure: trying to validate a finished validation pipeline',
+          () {
+        simpleValidator.hasLengthN(3);
+        validationStatus.finish();
+        expect(
+          simpleValidator.validate,
+          throwsA(
+            isA<ValidationFailure>().having(
+              (e) => e.failureCode,
+              'have the same failure code',
+              equals(
+                ValidationFailureCode
+                    .executingValidationStepsOnFinishedPipeline,
+              ),
+            ),
+          ),
+        );
+      });
+      test('validate two steps', () {
+        const target = 'Abcd';
+        const validationName = 'Check length 3 and starts with upper case';
+        final validationSts = ValidationStatus(
+          validationName: validationName,
+        );
+        final strValidator = SimpleValidator(
+          target: target,
+          validationStatus: validationSts,
+        )..hasLengthN(3);
+
+        SimpleValidator(
+          target: target,
+          validationStatus: validationSts,
+        )
+          ..startsWithUpperCase()
+          ..validate();
+        expect(
+          validationSts.status,
+          equals(
+            const UnitValidationStatus(
+              nodeName: validationName,
+              status: UnitValidationStatusCode.success,
+              finished: false,
+              description: 'The word "Abcd" starts with upper case.',
+            ),
+          ),
+        );
+        strValidator.validate();
+        validationSts.finish();
+        expect(
+          validationSts.status,
+          equals(
+            const UnitValidationStatus(
+              nodeName: validationName,
+              status: UnitValidationStatusCode.failed,
+              description: 'The word "Abcd" has length 4 which is greater than '
+                  '3.',
+            ),
+          ),
+        );
+      });
+    });
     group('registerValidationMethod', () {
       test('throw failure: add new step to finished validation pipeline', () {
-        final finishedValidationStatus = ValidationStatus(validationName: 'n1');
-        final newValidator = SimpleValidator(
-          target: 'str',
-          validationStatus: finishedValidationStatus,
-        )..hasLengthN(2);
-        finishedValidationStatus.finish();
+        simpleValidator.hasLengthN(2);
+        validationStatus.finish();
         expect(
-          newValidator.startsWithUpperCase,
+          simpleValidator.startsWithUpperCase,
           throwsA(
             isA<ValidationFailure>().having(
               (e) => e.failureCode,

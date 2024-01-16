@@ -44,6 +44,19 @@ enum ValidationFailureCode {
         '"failed", "success", or "warning" are accepted.',
   ),
 
+  /// Failure code for attempting to execute validation steps on a validation
+  /// pipeline that has already concluded its process.
+  ///
+  /// This error is raised when there is an attempt to execute additional
+  /// validation steps in a pipeline that has already been marked as finished.
+  /// This typically indicates an error in the process flow where validation
+  /// steps are being applied after the pipeline should have ceased operations,
+  /// potentially leading to incorrect or misleading validation results.
+  executingValidationStepsOnFinishedPipeline(
+    message: 'Execution attempt on a finished validation pipeline: no further '
+        'validation steps can be processed.',
+  ),
+
   /// Enumeration for code 'unknown'
   unknown(
     message: 'Unknown excepction occurred.',

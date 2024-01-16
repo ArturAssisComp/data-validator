@@ -63,6 +63,21 @@ abstract base class BaseValidator<T> {
     _validationPipeline.add((method: validationMethod, executed: false));
   }
 
-  /// Executes the pipelineand clear the pipeline queue.
-  void validate() {}
+  /// Executes the pipeline and clear the pipeline queue.
+  void validate() {
+    if (_validationStatus.finished) {
+      throw const ValidationFailure(
+        failureCode:
+            ValidationFailureCode.executingValidationStepsOnFinishedPipeline,
+      );
+    }
+    for (var i = 0; i < _validationPipeline.length; i++) {
+      final (method: method, executed: executed) = _validationPipeline[i];
+      if (!executed) {
+        final unitValidationStatus = method();
+        _validationStatus.addResult(unitValidationStatus);
+        _validationPipeline[i] = (executed: true, method: method);
+      }
+    }
+  }
 }
