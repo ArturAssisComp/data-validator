@@ -17,12 +17,17 @@ final class ValidationStatus {
   UnmodifiableListView<UnitValidationStatus> get detailedStatus =>
       UnmodifiableListView<UnitValidationStatus>(_validationStatus);
 
+  UnitValidationStatus _status;
+
   /// This attribute is a summary of the general status of the current
   /// validatation pipeline status. It is initiated with the `validationName`
   /// as [UnitValidationStatus.nodeName] and with
   /// [UnitValidationStatusCode.notDefined] as [UnitValidationStatus.status].
   /// The initial description is the default one.
-  final UnitValidationStatus status;
+  UnitValidationStatus get status => _status;
+
+  /// Gets the finished status for the validation process.
+  bool get finished => _status.finished;
 
   /// {@macro ValidationStatus}
   ///
@@ -32,17 +37,146 @@ final class ValidationStatus {
   /// process. It will be used to describe the general state of the validation
   /// process represented by this [ValidationStatus].
   ValidationStatus({required String validationName})
-      : status = UnitValidationStatus(
+      : _status = UnitValidationStatus(
           nodeName: validationName,
           status: UnitValidationStatusCode.notDefined,
+          finished: false,
           description: UnitValidationStatusCode.notDefined.defaultDescription,
         );
 
-  /// Adds a new validation result to the status.
-  /// The result can be a single `UnitValidationStatus` or a list of them.
-  // ignore: avoid_annotating_with_dynamic
-  void addResult(UnitValidationStatus validationStatus) =>
-      _validationStatus.add(validationStatus);
+  /// Update the current validation status with the new unit validation status
+  /// [newState]. It also updates the general attribute [status] that is a
+  /// summary of all the detailed validation status composed by all the multiple
+  /// [UnitValidationStatus] that compose the validation pipeline.
+  void addResult(UnitValidationStatus newState) {
+    _checkThisFinished();
+    _checkNewStateIsValid(newState);
+
+    _validationStatus.add(newState.copyWith());
+    _updateStatus(newState);
+  }
+
+  void _checkThisFinished() {
+    if (_status.finished) {
+      throw const ValidationFailure(
+        failureCode:
+            ValidationFailureCode.addingStateToFinishedValidationPipeline,
+      );
+    }
+  }
+
+  void _checkNewStateIsValid(UnitValidationStatus newState) {
+    final isInvalid =
+        (newState.status == UnitValidationStatusCode.notDefined) ||
+            (!newState.finished &&
+                newState.status != UnitValidationStatusCode.failed);
+    if (isInvalid) {
+      throw const ValidationFailure(
+        failureCode:
+            ValidationFailureCode.addingNotDefinedStateToValidationPipeline,
+      );
+    }
+  }
+
+  /// Updates the general state of the validation status based on a new state.
+  ///
+  /// This method is used to modify the overall validation status of a pipeline
+  /// in response to a new validation unit's result. The method applies specific
+  /// rules to determine the new general state, as follows:
+  ///
+  /// - Sets to [UnitValidationStatusCode.notDefined] if the validation pipeline
+  ///   has not started yet. This is the initial state before any validation has
+  ///   occurred.
+  ///
+  /// - Sets to [UnitValidationStatusCode.failed] if the new state's status is
+  ///   `failed`. The general state is updated to `failed` if the previous state
+  ///   was `notDefined`, `success`, or `warning`. This indicates that a failure
+  ///   in any part of the pipeline leads to the entire pipeline being marked as
+  ///   failed. If the general status is already `failed`, the message is not
+  ///   updated. The message from the first failed step is maintained.
+  ///
+  /// - Sets to [UnitValidationStatusCode.success] if the new state's status is
+  ///   `success`, but only if the previous state was `notDefined` or `success`.
+  ///   This reflects a successful validation outcome, assuming no previous
+  ///   failures or warnings. Only the last `success` message is maintained.
+  ///
+  /// - Sets to [UnitValidationStatusCode.warning] if the new state's status is
+  ///   `warning` and the previous state was either `notDefined` or `success`.
+  ///   This indicates a situation where there are potential issues, but they
+  ///   are not critical enough to cause a failure. The first `warning` message
+  ///   is maintained, just like with the `failed` status.
+  ///
+  /// The method ensures that the general status of the validation process
+  /// accurately represents the cumulative outcome of all validation units.
+  ///
+  /// ## Parameters:
+  /// - `newState`: The [UnitValidationStatus] representing the outcome of the
+  ///   latest validation unit. This status is used to update the general state
+  ///   of the validation process.
+  void _updateStatus(UnitValidationStatus newState) {
+    switch (newState.status) {
+      case UnitValidationStatusCode.success:
+        _handleNewStateSuccess(newState.description);
+      case UnitValidationStatusCode.warning:
+        _handleNewStateWarning(newState.description);
+      case UnitValidationStatusCode.failed:
+        _handleNewStateFailed(newState.description);
+      case UnitValidationStatusCode.notDefined:
+        throw const ValidationFailure();
+    }
+  }
+
+  void _handleNewStateSuccess(String newDescription) {
+    final oldState = _status.status;
+    switch (oldState) {
+      case UnitValidationStatusCode.success:
+        _status = _status.copyWith(
+          description: newDescription,
+        );
+      case UnitValidationStatusCode.notDefined:
+        _status = _status.copyWith(
+          status: UnitValidationStatusCode.success,
+          description: newDescription,
+        );
+      case UnitValidationStatusCode.warning:
+      case UnitValidationStatusCode.failed:
+      // do nothing
+    }
+  }
+
+  void _handleNewStateWarning(String newDescription) {
+    final oldState = _status.status;
+    switch (oldState) {
+      case UnitValidationStatusCode.success:
+      case UnitValidationStatusCode.notDefined:
+        _status = _status.copyWith(
+          status: UnitValidationStatusCode.warning,
+          description: newDescription,
+        );
+      case UnitValidationStatusCode.warning:
+      case UnitValidationStatusCode.failed:
+      // do nothing
+    }
+  }
+
+  void _handleNewStateFailed(String newDescription) {
+    final oldState = _status.status;
+    switch (oldState) {
+      case UnitValidationStatusCode.success:
+      case UnitValidationStatusCode.notDefined:
+      case UnitValidationStatusCode.warning:
+        _status = _status.copyWith(
+          status: UnitValidationStatusCode.failed,
+          description: newDescription,
+        );
+      case UnitValidationStatusCode.failed:
+      // do nothing
+    }
+  }
+
+  /// Finished this validation process. After finished, it is not possible to
+  /// add more validation spets.
+  void finish() => _status = _status.copyWith(finished: true);
 
   @override
   bool operator ==(Object other) {
@@ -50,7 +184,7 @@ final class ValidationStatus {
       return true;
     }
     if (other is ValidationStatus) {
-      return status == other.status &&
+      return _status == other._status &&
           listEquality(detailedStatus, other.detailedStatus) &&
           runtimeType == other.runtimeType;
     }
@@ -58,5 +192,5 @@ final class ValidationStatus {
   }
 
   @override
-  int get hashCode => Object.hashAll([status, ..._validationStatus]);
+  int get hashCode => Object.hashAll([_status, ..._validationStatus]);
 }
