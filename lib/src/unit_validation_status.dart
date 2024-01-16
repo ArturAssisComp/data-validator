@@ -27,8 +27,9 @@ enum UnitValidationStatusCode {
   ),
 
   /// If the validation was not finished, this status means that the validation
-  /// process was not initiated yet. If the validation process is finished, it
-  /// can not have this status.
+  /// process was not initiated yet. If the validation process is finished with
+  /// this status, it means that the validation process was finished without
+  /// the execution of any step, like an empty validation process.
   notDefined(
     defaultDescription: 'Target validation data is not validated yet.',
   );
@@ -109,8 +110,9 @@ final class UnitValidationStatus {
       );
 
   @override
-  String toString() => '<$nodeName: ${status.name} '
-      '[${finished ? 'finished' : 'not finished'}]>';
+  String toString() => '($nodeName: ${status.name} '
+      '[${finished ? 'finished' : 'not finished'}]'
+      '${description.isNotEmpty ? ', "$description"' : ''})';
 
   @override
   bool operator ==(Object other) {

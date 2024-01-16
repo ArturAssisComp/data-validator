@@ -5,19 +5,26 @@ void main() {
   const nodeName = 'node1';
   group('UnitValidationStatus', () {
     group('toString', () {
+      test('name: n1 with success and description', () {
+        const s1 = UnitValidationStatus(
+            nodeName: 'n1',
+            status: UnitValidationStatusCode.success,
+            description: 'hello world.');
+        expect(s1.toString(), '(n1: success [finished], "hello world.")');
+      });
       test('name: n1 with success', () {
         const s1 = UnitValidationStatus(
           nodeName: 'n1',
           status: UnitValidationStatusCode.success,
         );
-        expect(s1.toString(), '<n1: success [finished]>');
+        expect(s1.toString(), '(n1: success [finished])');
       });
       test("name: '' with failure", () {
         const s1 = UnitValidationStatus(
           nodeName: '',
           status: UnitValidationStatusCode.failed,
         );
-        expect(s1.toString(), '<: failed [finished]>');
+        expect(s1.toString(), '(: failed [finished])');
       });
     });
     group('hashCode', () {
