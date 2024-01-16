@@ -52,7 +52,6 @@ class ValidationFailure implements Exception {
   /// {@macro ValidationFailure}
   const ValidationFailure({this.failureCode = ValidationFailureCode.unknown});
 
-  // TODO(ArturAssisComp): test this function.
   @override
   String toString() => 'ValidationFailure: ${failureCode.message}';
 }
