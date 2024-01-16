@@ -122,7 +122,7 @@ final class ValidationStatus {
       case UnitValidationStatusCode.failed:
         _handleNewStateFailed(newState.description);
       case UnitValidationStatusCode.notDefined:
-        // do nothing
+      // do nothing
     }
   }
 
