@@ -50,7 +50,7 @@ final class ValidationStatus {
   /// [UnitValidationStatus] that compose the validation pipeline.
   void addResult(UnitValidationStatus newState) {
     _checkThisFinished();
-    _checkNewStateIsValid(newState);
+    _checkUnfinishedNewStateIsValid(newState);
 
     _validationStatus.add(newState.copyWith());
     _updateStatus(newState);
@@ -65,12 +65,11 @@ final class ValidationStatus {
     }
   }
 
-  void _checkNewStateIsValid(UnitValidationStatus newState) {
-    final isInvalid =
-        (newState.status == UnitValidationStatusCode.notDefined) ||
-            (!newState.finished &&
-                newState.status != UnitValidationStatusCode.failed);
-    if (isInvalid) {
+  /// This condition guarantees that any unfinished new state is valid.
+  /// Otherwise, it throws an exception.
+  void _checkUnfinishedNewStateIsValid(UnitValidationStatus newState) {
+    if (!newState.finished &&
+        newState.status != UnitValidationStatusCode.failed) {
       throw const ValidationFailure(
         failureCode:
             ValidationFailureCode.addingNotDefinedStateToValidationPipeline,
@@ -122,7 +121,10 @@ final class ValidationStatus {
       case UnitValidationStatusCode.failed:
         _handleNewStateFailed(newState.description);
       case UnitValidationStatusCode.notDefined:
-      // do nothing
+        throw const ValidationFailure(
+          failureCode:
+              ValidationFailureCode.addingNotDefinedStateToValidationPipeline,
+        );
     }
   }
 
