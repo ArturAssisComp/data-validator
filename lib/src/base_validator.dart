@@ -16,7 +16,19 @@ abstract base class BaseValidator<T> {
   /// important to note that this instance will be modified as the validation
   /// process happens.
   /// {@endtemplate}
-  final ValidationStatus validationStatus;
+  final ValidationStatus _validationStatus;
+
+  final List<({ValidationMethod method, bool executed})> _validationPipeline =
+      [];
+
+  /// Returns the number of validation methods that still need to be executed.
+  int remainingValidationMethodsCount() => _validationPipeline.fold<int>(
+        0,
+        (previousValue, record) {
+          final (executed: executed, method: _) = record;
+          return previousValue + (executed ? 0 : 1);
+        },
+      );
 
   /// {@macro BaseValidator}
   ///
@@ -26,8 +38,31 @@ abstract base class BaseValidator<T> {
   /// {@macro BaseValidator_target}
   /// - final [ValidationStatus] `validationStatus`:
   /// {@macro BaseValidator_validationStatus}
-  BaseValidator({required this.target, required this.validationStatus});
+  BaseValidator({
+    required this.target,
+    required ValidationStatus validationStatus,
+  }) : _validationStatus = validationStatus;
 
-  /// Executes the pipeline and clear the pipeline queue.
+  /// While creating a new validator class, this method is used to registrate
+  /// a new validation method. Validation methods are used as steps for the
+  /// validation pipeline.
+  ///
+  /// ## Parameters
+  /// ### Named Parameters
+  /// - [ValidationMethod] `validationMethod`: the validation method to be
+  /// registered.
+  void registerValidationMethod(
+    ValidationMethod validationMethod,
+  ) {
+    if (_validationStatus.finished) {
+      throw const ValidationFailure(
+        failureCode: ValidationFailureCode
+            .addingNewValidationStepToFinishedValidationPipeline,
+      );
+    }
+    _validationPipeline.add((method: validationMethod, executed: false));
+  }
+
+  /// Executes the pipelineand clear the pipeline queue.
   void validate() {}
 }

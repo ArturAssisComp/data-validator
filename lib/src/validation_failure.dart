@@ -16,6 +16,19 @@ enum ValidationFailureCode {
         'finished.',
   ),
 
+  /// Failure code for attempting to add a new validation step to a validation
+  /// pipeline that has already concluded its process.
+  ///
+  /// This failure occurs when a new validation step is attempted to be added to
+  /// a validation pipeline that is already marked as completed. This scenario
+  /// typically indicates a logic error where the validation process is being
+  /// modified post completion, which could lead to inconsistent or invalid
+  /// validation states.
+  addingNewValidationStepToFinishedValidationPipeline(
+    message: 'Failed to add a new validation step: the validation pipeline '
+        'is already complete.',
+  ),
+
   /// Failure code for attempting to add an undefined state to the validation
   /// pipeline.
   ///
