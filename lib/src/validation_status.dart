@@ -122,7 +122,7 @@ final class ValidationStatus {
       case UnitValidationStatusCode.failed:
         _handleNewStateFailed(newState.description);
       case UnitValidationStatusCode.notDefined:
-        throw const ValidationFailure();
+        // do nothing
     }
   }
 
