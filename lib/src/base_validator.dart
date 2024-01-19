@@ -1,11 +1,11 @@
 import 'package:data_validator/data_validator.dart';
 
 /// {@template BaseValidator}
-/// A `BaseValidator` class serves as the foundation for creating custom 
+/// A `BaseValidator` class serves as the foundation for creating custom
 /// validators.
-/// It facilitates the registration and execution of validation methods for a 
+/// It facilitates the registration and execution of validation methods for a
 /// specific type [T].
-/// 
+///
 /// Example:
 /// ```dart
 /// final class StringValidator extends BaseValidator<String> {
@@ -21,7 +21,7 @@ abstract base class BaseValidator<T> {
   final T target;
 
   /// {@template BaseValidator_validationStatus}
-  /// Tracks the current state of validation. This status is updated as 
+  /// Tracks the current state of validation. This status is updated as
   /// validation progresses.
   /// {@endtemplate}
   final ValidationStatus _validationStatus;
@@ -60,10 +60,10 @@ abstract base class BaseValidator<T> {
   /// ### Named Parameters
   /// - [ValidationMethod] `validationMethod`: the validation method to be
   /// registered.
-  /// 
+  ///
   /// ## Exception Handling
-  /// This method throws a [ValidationFailure] exception if called after 
-  /// finishing the validation process. The validation process is finished when 
+  /// This method throws a [ValidationFailure] exception if called after
+  /// finishing the validation process. The validation process is finished when
   /// [ValidationStatus] is finished.
   /// - [ValidationFailure] with the following failureCode:
   // ignore: lines_longer_than_80_chars
@@ -82,10 +82,10 @@ abstract base class BaseValidator<T> {
 
   /// Executes the pipeline and clears it. This method must be called in order
   /// to actually execute the validation methods.
-  /// 
+  ///
   /// ## Exception Handling
-  /// This method throws a [ValidationFailure] exception if called after 
-  /// finishing the validation process. The validation process is finished when 
+  /// This method throws a [ValidationFailure] exception if called after
+  /// finishing the validation process. The validation process is finished when
   /// [ValidationStatus] is finished.
   /// - [ValidationFailure] with the following failureCode:
   /// [ValidationFailureCode.executingValidationStepsOnFinishedPipeline].
