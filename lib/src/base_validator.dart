@@ -1,20 +1,28 @@
 import 'package:data_validator/data_validator.dart';
 
 /// {@template BaseValidator}
-/// This class is the base class for building validators. It should be inherited
-/// in order to create custom validators.
+/// A `BaseValidator` class serves as the foundation for creating custom 
+/// validators.
+/// It facilitates the registration and execution of validation methods for a 
+/// specific type [T].
+/// 
+/// Example:
+/// ```dart
+/// final class StringValidator extends BaseValidator<String> {
+///   SimpleValidator({required super.target, required super.validationStatus});
+///   // Custom validation methods can be added here
+/// }
+/// ```
 /// {@endtemplate}
 abstract base class BaseValidator<T> {
   /// {@template BaseValidator_target}
-  /// This parameter represents the object to be validated. Its type must be
-  /// defined in the concrete class that inherits from [BaseValidator].
+  /// The target object to be validated.
   /// {@endtemplate}
   final T target;
 
   /// {@template BaseValidator_validationStatus}
-  /// The current validation status being used to validate some data. It is
-  /// important to note that this instance will be modified as the validation
-  /// process happens.
+  /// Tracks the current state of validation. This status is updated as 
+  /// validation progresses.
   /// {@endtemplate}
   final ValidationStatus _validationStatus;
 
@@ -22,6 +30,7 @@ abstract base class BaseValidator<T> {
       [];
 
   /// Returns the number of validation methods that still need to be executed.
+  /// It may be used to check if there are any methods to be executed yet.
   int remainingValidationMethodsCount() => _validationPipeline.fold<int>(
         0,
         (previousValue, record) {
@@ -51,6 +60,14 @@ abstract base class BaseValidator<T> {
   /// ### Named Parameters
   /// - [ValidationMethod] `validationMethod`: the validation method to be
   /// registered.
+  /// 
+  /// ## Exception Handling
+  /// This method throws a [ValidationFailure] exception if called after 
+  /// finishing the validation process. The validation process is finished when 
+  /// [ValidationStatus] is finished.
+  /// - [ValidationFailure] with the following failureCode:
+  // ignore: lines_longer_than_80_chars
+  /// [ValidationFailureCode.addingNewValidationStepToFinishedValidationPipeline].
   void registerValidationMethod(
     ValidationMethod validationMethod,
   ) {
@@ -63,7 +80,15 @@ abstract base class BaseValidator<T> {
     _validationPipeline.add((method: validationMethod, executed: false));
   }
 
-  /// Executes the pipeline and clear the pipeline queue.
+  /// Executes the pipeline and clears it. This method must be called in order
+  /// to actually execute the validation methods.
+  /// 
+  /// ## Exception Handling
+  /// This method throws a [ValidationFailure] exception if called after 
+  /// finishing the validation process. The validation process is finished when 
+  /// [ValidationStatus] is finished.
+  /// - [ValidationFailure] with the following failureCode:
+  /// [ValidationFailureCode.executingValidationStepsOnFinishedPipeline].
   void validate() {
     if (_validationStatus.finished) {
       throw const ValidationFailure(
