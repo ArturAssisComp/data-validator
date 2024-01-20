@@ -1,4 +1,4 @@
-/// This lib implements a validation framework that makes the process of 
+/// This lib implements a validation framework that makes the process of
 /// validating data easier. It helps the implementation of validation pipelines
 /// with capability of tracing and receiving detailed information about the
 /// failure.
