@@ -30,7 +30,7 @@ jobs:
         run: dart analyze --fatal-infos --fatal-warnings lib test
 
       - name: Generate docs 
-        run: dart docs
+        run: dart doc
 
       - name: Runing unit tests
         run: |
