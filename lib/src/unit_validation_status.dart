@@ -4,7 +4,7 @@
 /// (unit) in the validation pipeline, providing clear status feedback for that
 /// particular unit. It is important to note that the semantics of each of those
 /// states can vary depending on the finish status of the validation process.
-/// For example, if the status code is `failed`, it does not matter if the 
+/// For example, if the status code is `failed`, it does not matter if the
 /// validation process is completed or not, the final status is already defined
 /// and it will be `failed`.
 enum UnitValidationStatusCode {
@@ -30,9 +30,8 @@ enum UnitValidationStatusCode {
   ),
 
   /// If the validation was not finished, this status means that the validation
-  /// process was not initiated yet. If the validation process is finished with
-  /// this status, it means that the validation process was finished without
-  /// the execution of any step, like an empty validation process.
+  /// process was not initiated yet. This status is not defined for finished
+  /// validation processes.
   notDefined(
     defaultDescription: 'Target validation data is not validated yet.',
   );

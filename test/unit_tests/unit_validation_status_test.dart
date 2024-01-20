@@ -150,7 +150,10 @@ void main() {
           nodeName: nodeName,
           statusCode: UnitValidationStatusCode.success,
         );
-        expect(v1.copyWith(statusCode: UnitValidationStatusCode.success), expected);
+        expect(
+          v1.copyWith(statusCode: UnitValidationStatusCode.success),
+          expected,
+        );
       });
     });
   });
