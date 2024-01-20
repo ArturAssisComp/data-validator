@@ -1,5 +1,5 @@
-/// This lib implements a validation framework that makes it easier the process
-/// of validating data. It helps the implementation of validation pipelines
+/// This lib implements a validation framework that makes the process of 
+/// validating data easier. It helps the implementation of validation pipelines
 /// with capability of tracing and receiving detailed information about the
 /// failure.
 ///
