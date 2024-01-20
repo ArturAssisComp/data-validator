@@ -11,14 +11,14 @@ final class SimpleValidator extends BaseValidator<String> {
     final nodeName = 'hasLength$N';
     final result = UnitValidationStatus(
       nodeName: nodeName,
-      status: UnitValidationStatusCode.notDefined,
+      statusCode: UnitValidationStatusCode.notDefined,
       finished: false,
     );
     registerValidationMethod(
       () {
         if (target.length > N) {
           return result.copyWith(
-            status: UnitValidationStatusCode.failed,
+            statusCode: UnitValidationStatusCode.failed,
             finished: true,
             description: 'The word "$target" has length ${target.length} which '
                 'is greater than $N.',
@@ -26,14 +26,14 @@ final class SimpleValidator extends BaseValidator<String> {
         }
         if (target.length < N) {
           return result.copyWith(
-            status: UnitValidationStatusCode.failed,
+            statusCode: UnitValidationStatusCode.failed,
             finished: true,
             description: 'The word "$target" has length ${target.length} which '
                 'is less than $N.',
           );
         }
         return result.copyWith(
-          status: UnitValidationStatusCode.success,
+          statusCode: UnitValidationStatusCode.success,
           finished: true,
           description: 'The word "$target" has length ${target.length} which '
               'is equal to $N.',
@@ -46,20 +46,20 @@ final class SimpleValidator extends BaseValidator<String> {
     const nodeName = 'startsWithUpperCase';
     const result = UnitValidationStatus(
       nodeName: nodeName,
-      status: UnitValidationStatusCode.notDefined,
+      statusCode: UnitValidationStatusCode.notDefined,
       finished: false,
     );
     registerValidationMethod(
       () {
         if (target[0].toUpperCase() != target[0]) {
           return result.copyWith(
-            status: UnitValidationStatusCode.failed,
+            statusCode: UnitValidationStatusCode.failed,
             finished: true,
             description: 'The word "$target" does not start with upper case.',
           );
         }
         return result.copyWith(
-          status: UnitValidationStatusCode.success,
+          statusCode: UnitValidationStatusCode.success,
           finished: true,
           description: 'The word "$target" starts with upper case.',
         );
@@ -93,7 +93,7 @@ void main() {
           const UnitValidationStatus(
             nodeName: validationName,
             finished: false,
-            status: UnitValidationStatusCode.failed,
+            statusCode: UnitValidationStatusCode.failed,
             description: 'The word "test" has length 4 which is greater than '
                 '3.',
           ),
@@ -141,7 +141,7 @@ void main() {
           equals(
             const UnitValidationStatus(
               nodeName: validationName,
-              status: UnitValidationStatusCode.success,
+              statusCode: UnitValidationStatusCode.success,
               finished: false,
               description: 'The word "Abcd" starts with upper case.',
             ),
@@ -154,7 +154,7 @@ void main() {
           equals(
             const UnitValidationStatus(
               nodeName: validationName,
-              status: UnitValidationStatusCode.failed,
+              statusCode: UnitValidationStatusCode.failed,
               description: 'The word "Abcd" has length 4 which is greater than '
                   '3.',
             ),

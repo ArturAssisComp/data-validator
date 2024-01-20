@@ -68,11 +68,11 @@ enum ValidationFailureCode {
 }
 
 /// {@template ValidationFailure}
-/// Thrown during the validation process if a failure occurs.
+/// Failure thrown during the validation process.
 /// {@endtemplate}
 class ValidationFailure implements Exception {
   /// The related [ValidationFailureCode] element that gives
-  /// details about the error.
+  /// details about the validation failure.
   final ValidationFailureCode failureCode;
 
   /// {@macro ValidationFailure}

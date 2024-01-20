@@ -29,6 +29,9 @@ jobs:
       - name: Analyze project source
         run: dart analyze --fatal-infos --fatal-warnings lib test
 
+      - name: Generate docs 
+        run: dart doc
+
       - name: Runing unit tests
         run: |
           dart pub global activate coverage

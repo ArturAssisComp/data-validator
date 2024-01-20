@@ -10,7 +10,7 @@ void main() {
       );
       final expectedUnitValidationStatus = UnitValidationStatus(
         nodeName: validationStatusName,
-        status: UnitValidationStatusCode.notDefined,
+        statusCode: UnitValidationStatusCode.notDefined,
         finished: false,
         description: UnitValidationStatusCode.notDefined.defaultDescription,
       );
@@ -39,7 +39,7 @@ void main() {
         final v = ValidationStatus(validationName: 'name1')..finish();
         const u = UnitValidationStatus(
           nodeName: 'v1',
-          status: UnitValidationStatusCode.success,
+          statusCode: UnitValidationStatusCode.success,
         );
         expect(
           () => v.addResult(u),
@@ -59,14 +59,14 @@ void main() {
           'validation status', () {
         const newState = UnitValidationStatus(
           nodeName: 'n1',
-          status: UnitValidationStatusCode.success,
+          statusCode: UnitValidationStatusCode.success,
         );
         final v = ValidationStatus(validationName: 'name1')
           ..addResult(newState)
           ..finish();
         const u = UnitValidationStatus(
           nodeName: 'v1',
-          status: UnitValidationStatusCode.success,
+          statusCode: UnitValidationStatusCode.success,
         );
         expect(
           () => v.addResult(u),
@@ -86,32 +86,32 @@ void main() {
         const validationName = 'validation process';
         const finishedSuccessState = UnitValidationStatus(
           nodeName: 's1',
-          status: UnitValidationStatusCode.success,
+          statusCode: UnitValidationStatusCode.success,
           description: 'successful operation',
         );
         const finishedSuccessState2 = UnitValidationStatus(
           nodeName: 's2',
-          status: UnitValidationStatusCode.success,
+          statusCode: UnitValidationStatusCode.success,
           description: 'successful operation 2',
         );
         const finishedWarningState = UnitValidationStatus(
           nodeName: 'w1',
-          status: UnitValidationStatusCode.warning,
+          statusCode: UnitValidationStatusCode.warning,
           description: 'warning operation',
         );
         const finishedWarningState2 = UnitValidationStatus(
           nodeName: 'w2',
-          status: UnitValidationStatusCode.warning,
+          statusCode: UnitValidationStatusCode.warning,
           description: 'warning operation 2',
         );
         const finishedFailedState = UnitValidationStatus(
           nodeName: 'f1',
-          status: UnitValidationStatusCode.failed,
+          statusCode: UnitValidationStatusCode.failed,
           description: 'failed operation',
         );
         const finishedFailedState2 = UnitValidationStatus(
           nodeName: 'f2',
-          status: UnitValidationStatusCode.failed,
+          statusCode: UnitValidationStatusCode.failed,
           description: 'failed operation 2',
         );
         setUp(
@@ -164,7 +164,7 @@ void main() {
                 equals(
                   UnitValidationStatus(
                     nodeName: validationName,
-                    status: testInput.mainState.status,
+                    statusCode: testInput.mainState.statusCode,
                     finished: false,
                     description: testInput.mainState.description,
                   ),
@@ -189,7 +189,7 @@ void main() {
                 equals(
                   UnitValidationStatus(
                     nodeName: validationName,
-                    status: testInput.prevalentState.status,
+                    statusCode: testInput.prevalentState.statusCode,
                     finished: false,
                     description: testInput.prevalentState.description,
                   ),
@@ -207,7 +207,7 @@ void main() {
               equals(
                 UnitValidationStatus(
                   nodeName: validationName,
-                  status: UnitValidationStatusCode.notDefined,
+                  statusCode: UnitValidationStatusCode.notDefined,
                   finished: false,
                   description:
                       UnitValidationStatusCode.notDefined.defaultDescription,
@@ -233,7 +233,7 @@ void main() {
               equals(
                 UnitValidationStatus(
                   nodeName: validationName,
-                  status: UnitValidationStatusCode.success,
+                  statusCode: UnitValidationStatusCode.success,
                   finished: false,
                   description: finishedSuccessState.description,
                 ),
@@ -258,7 +258,7 @@ void main() {
               equals(
                 UnitValidationStatus(
                   nodeName: validationName,
-                  status: UnitValidationStatusCode.warning,
+                  statusCode: UnitValidationStatusCode.warning,
                   finished: false,
                   description: finishedWarningState.description,
                 ),
@@ -283,7 +283,7 @@ void main() {
               equals(
                 UnitValidationStatus(
                   nodeName: validationName,
-                  status: UnitValidationStatusCode.warning,
+                  statusCode: UnitValidationStatusCode.warning,
                   finished: false,
                   description: finishedWarningState.description,
                 ),
@@ -308,7 +308,7 @@ void main() {
               equals(
                 UnitValidationStatus(
                   nodeName: validationName,
-                  status: UnitValidationStatusCode.failed,
+                  statusCode: UnitValidationStatusCode.failed,
                   finished: false,
                   description: finishedFailedState.description,
                 ),
@@ -333,7 +333,7 @@ void main() {
               equals(
                 UnitValidationStatus(
                   nodeName: validationName,
-                  status: UnitValidationStatusCode.failed,
+                  statusCode: UnitValidationStatusCode.failed,
                   finished: false,
                   description: finishedFailedState.description,
                 ),
@@ -360,7 +360,7 @@ void main() {
               equals(
                 UnitValidationStatus(
                   nodeName: validationName,
-                  status: UnitValidationStatusCode.success,
+                  statusCode: UnitValidationStatusCode.success,
                   finished: false,
                   description: finishedSuccessState.description,
                 ),
@@ -385,7 +385,7 @@ void main() {
               equals(
                 UnitValidationStatus(
                   nodeName: validationName,
-                  status: UnitValidationStatusCode.failed,
+                  statusCode: UnitValidationStatusCode.failed,
                   finished: false,
                   description: finishedFailedState.description,
                 ),
@@ -410,7 +410,7 @@ void main() {
               equals(
                 UnitValidationStatus(
                   nodeName: validationName,
-                  status: UnitValidationStatusCode.failed,
+                  statusCode: UnitValidationStatusCode.failed,
                   finished: false,
                   description: finishedFailedState.description,
                 ),
@@ -422,7 +422,7 @@ void main() {
       group('invalid state for unit validation status', () {
         const uvs1 = UnitValidationStatus(
           nodeName: 'n1',
-          status: UnitValidationStatusCode.success,
+          statusCode: UnitValidationStatusCode.success,
         );
         late ValidationStatus validationStatus;
         setUp(() {
@@ -434,7 +434,7 @@ void main() {
             'to the validation satus', () {
           const notDefinedStatus = UnitValidationStatus(
             nodeName: 'v1',
-            status: UnitValidationStatusCode.notDefined,
+            statusCode: UnitValidationStatusCode.notDefined,
           );
           expect(
             () => validationStatus.addResult(notDefinedStatus),
@@ -455,12 +455,12 @@ void main() {
             'to the validation satus', () {
           const successStatus = UnitValidationStatus(
             nodeName: 'v1',
-            status: UnitValidationStatusCode.success,
+            statusCode: UnitValidationStatusCode.success,
             finished: false,
           );
           const warningStatus = UnitValidationStatus(
             nodeName: 'v1',
-            status: UnitValidationStatusCode.success,
+            statusCode: UnitValidationStatusCode.success,
             finished: false,
           );
           expect(
@@ -530,13 +530,13 @@ void main() {
         v1.addResult(
           const UnitValidationStatus(
             nodeName: 'Node1',
-            status: UnitValidationStatusCode.success,
+            statusCode: UnitValidationStatusCode.success,
           ),
         );
         v2.addResult(
           const UnitValidationStatus(
             nodeName: 'Node2',
-            status: UnitValidationStatusCode.failed,
+            statusCode: UnitValidationStatusCode.failed,
           ),
         );
         expect(v1, isNot(equals(v2)));
@@ -548,7 +548,7 @@ void main() {
           ..addResult(
             const UnitValidationStatus(
               nodeName: 'Node',
-              status: UnitValidationStatusCode.success,
+              statusCode: UnitValidationStatusCode.success,
             ),
           );
         expect(v1, isNot(equals(v2)));
@@ -560,13 +560,13 @@ void main() {
         v1.addResult(
           const UnitValidationStatus(
             nodeName: 'Node',
-            status: UnitValidationStatusCode.success,
+            statusCode: UnitValidationStatusCode.success,
           ),
         );
         v2.addResult(
           const UnitValidationStatus(
             nodeName: 'Node',
-            status: UnitValidationStatusCode.success,
+            statusCode: UnitValidationStatusCode.success,
           ),
         );
         expect(v1, equals(v2));
@@ -579,26 +579,26 @@ void main() {
           ..addResult(
             const UnitValidationStatus(
               nodeName: 'Node1',
-              status: UnitValidationStatusCode.success,
+              statusCode: UnitValidationStatusCode.success,
             ),
           )
           ..addResult(
             const UnitValidationStatus(
               nodeName: 'Node2',
-              status: UnitValidationStatusCode.failed,
+              statusCode: UnitValidationStatusCode.failed,
             ),
           );
         v2
           ..addResult(
             const UnitValidationStatus(
               nodeName: 'Node2',
-              status: UnitValidationStatusCode.failed,
+              statusCode: UnitValidationStatusCode.failed,
             ),
           )
           ..addResult(
             const UnitValidationStatus(
               nodeName: 'Node1',
-              status: UnitValidationStatusCode.success,
+              statusCode: UnitValidationStatusCode.success,
             ),
           );
         expect(v1, isNot(equals(v2)));
