@@ -7,7 +7,7 @@ void main() {
     ..addResult(
       const UnitValidationStatus(
         nodeName: 'any',
-        status: UnitValidationStatusCode.notDefined,
+        statusCode: UnitValidationStatusCode.notDefined,
       ),
     );
   log(overallStatus.status.toString());

@@ -22,7 +22,7 @@ final class ValidationStatus {
   /// This attribute is a summary of the general status of the current
   /// validatation pipeline status. It is initiated with the `validationName`
   /// as [UnitValidationStatus.nodeName] and with
-  /// [UnitValidationStatusCode.notDefined] as [UnitValidationStatus.status].
+  /// [UnitValidationStatusCode.notDefined] as [UnitValidationStatus.statusCode].
   /// The initial description is the default one.
   UnitValidationStatus get status => _status;
 
@@ -39,7 +39,7 @@ final class ValidationStatus {
   ValidationStatus({required String validationName})
       : _status = UnitValidationStatus(
           nodeName: validationName,
-          status: UnitValidationStatusCode.notDefined,
+          statusCode: UnitValidationStatusCode.notDefined,
           finished: false,
           description: UnitValidationStatusCode.notDefined.defaultDescription,
         );
@@ -69,7 +69,7 @@ final class ValidationStatus {
   /// Otherwise, it throws an exception.
   void _checkUnfinishedNewStateIsValid(UnitValidationStatus newState) {
     if (!newState.finished &&
-        newState.status != UnitValidationStatusCode.failed) {
+        newState.statusCode != UnitValidationStatusCode.failed) {
       throw const ValidationFailure(
         failureCode:
             ValidationFailureCode.addingNotDefinedStateToValidationPipeline,
@@ -113,7 +113,7 @@ final class ValidationStatus {
   ///   latest validation unit. This status is used to update the general state
   ///   of the validation process.
   void _updateStatus(UnitValidationStatus newState) {
-    switch (newState.status) {
+    switch (newState.statusCode) {
       case UnitValidationStatusCode.success:
         _handleNewStateSuccess(newState.description);
       case UnitValidationStatusCode.warning:
@@ -129,7 +129,7 @@ final class ValidationStatus {
   }
 
   void _handleNewStateSuccess(String newDescription) {
-    final oldState = _status.status;
+    final oldState = _status.statusCode;
     switch (oldState) {
       case UnitValidationStatusCode.success:
         _status = _status.copyWith(
@@ -137,7 +137,7 @@ final class ValidationStatus {
         );
       case UnitValidationStatusCode.notDefined:
         _status = _status.copyWith(
-          status: UnitValidationStatusCode.success,
+          statusCode: UnitValidationStatusCode.success,
           description: newDescription,
         );
       case UnitValidationStatusCode.warning:
@@ -147,12 +147,12 @@ final class ValidationStatus {
   }
 
   void _handleNewStateWarning(String newDescription) {
-    final oldState = _status.status;
+    final oldState = _status.statusCode;
     switch (oldState) {
       case UnitValidationStatusCode.success:
       case UnitValidationStatusCode.notDefined:
         _status = _status.copyWith(
-          status: UnitValidationStatusCode.warning,
+          statusCode: UnitValidationStatusCode.warning,
           description: newDescription,
         );
       case UnitValidationStatusCode.warning:
@@ -162,13 +162,13 @@ final class ValidationStatus {
   }
 
   void _handleNewStateFailed(String newDescription) {
-    final oldState = _status.status;
+    final oldState = _status.statusCode;
     switch (oldState) {
       case UnitValidationStatusCode.success:
       case UnitValidationStatusCode.notDefined:
       case UnitValidationStatusCode.warning:
         _status = _status.copyWith(
-          status: UnitValidationStatusCode.failed,
+          statusCode: UnitValidationStatusCode.failed,
           description: newDescription,
         );
       case UnitValidationStatusCode.failed:

@@ -4,6 +4,9 @@
 /// (unit) in the validation pipeline, providing clear status feedback for that
 /// particular unit. It is important to note that the semantics of each of those
 /// states can vary depending on the finish status of the validation process.
+/// For example, if the status code is `failed`, it does not matter if the 
+/// validation process is completed or not, the final status is already defined
+/// and it will be `failed`.
 enum UnitValidationStatusCode {
   /// Indicates the validation was successful and the data meets all criteria
   /// for this unit. If the validation is not finished, it is a partial result
@@ -58,7 +61,7 @@ final class UnitValidationStatus {
   /// It reflects the current status of the validation process for this unit,
   /// such as success, failure, warning, or not yet defined, providing immediate
   /// insight into the outcome for this specific validation step.
-  final UnitValidationStatusCode status;
+  final UnitValidationStatusCode statusCode;
 
   /// If true, it means that the status represents a finished validation
   /// process. Otherwise, it represents a validation process that is still not
@@ -79,7 +82,7 @@ final class UnitValidationStatus {
   ///
   /// ## Parameters:
   /// - `nodeName`: The name of the node in the validation pipeline.
-  /// - `status`: The validation status code for this node.
+  /// - `statusCode`: The validation status code for this node.
   /// - `finished`: (Optional) Boolean determining if the validation process
   /// either finished or not.
   /// - `description`: (Optional) A descriptive message about the validation
@@ -88,7 +91,7 @@ final class UnitValidationStatus {
   /// {@macro UnitValidationStatus}
   const UnitValidationStatus({
     required this.nodeName,
-    required this.status,
+    required this.statusCode,
     this.finished = true,
     this.description = '',
   });
@@ -98,19 +101,19 @@ final class UnitValidationStatus {
   /// altering the other attributes.
   UnitValidationStatus copyWith({
     String? nodeName,
-    UnitValidationStatusCode? status,
+    UnitValidationStatusCode? statusCode,
     bool? finished,
     String? description,
   }) =>
       UnitValidationStatus(
         nodeName: nodeName ?? this.nodeName,
-        status: status ?? this.status,
+        statusCode: statusCode ?? this.statusCode,
         finished: finished ?? this.finished,
         description: description ?? this.description,
       );
 
   @override
-  String toString() => '($nodeName: ${status.name} '
+  String toString() => '($nodeName: ${statusCode.name} '
       '[${finished ? 'finished' : 'not finished'}]'
       '${description.isNotEmpty ? ', "$description"' : ''})';
 
@@ -121,7 +124,7 @@ final class UnitValidationStatus {
     }
     if (other is UnitValidationStatus) {
       return nodeName == other.nodeName &&
-          status == other.status &&
+          statusCode == other.statusCode &&
           finished == other.finished &&
           description == other.description &&
           runtimeType == other.runtimeType;
@@ -130,5 +133,5 @@ final class UnitValidationStatus {
   }
 
   @override
-  int get hashCode => Object.hash(nodeName, status, finished, description);
+  int get hashCode => Object.hash(nodeName, statusCode, finished, description);
 }
