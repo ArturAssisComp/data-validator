@@ -11,12 +11,21 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Data validation framework that allows the implementation of custom or pre-built 
+validation pipelines for generic data and also provides comprehensive insights 
+about the validation results.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Generic data validation
+- Details on validation results
+    - Failure
+    - Warning
+    - Success
+- Custom validators
+- Pre-built validators
+- Pure dart package
+- No external dependencies
 
 ## Getting started
 
